@@ -12,11 +12,11 @@ namespace PokemonAPI
 {
     internal class BlackJack
     {
-        private const int MAX_SCORE = 21;
+        public const int MAX_SCORE = 21;
         private const int CardImageStartPosition = 6;
         private const int CardImageEndPosition = 60;
         public static int _points = 0;
-        public static int _coins = 100;
+        public static int _coins = 1000;
         public static int _roundNumber = 0;
 
         public static int placeBetStartPosition = 0;
@@ -193,7 +193,7 @@ namespace PokemonAPI
             return AnsiConsole.Prompt(new SelectionPrompt<string>().Title("Czy [green]dobierasz kartę[/]?").PageSize(10).AddChoices(new[] { "DOBIERAM", "PAS" }));
         }
 
-        private static void GameResultLogic(int bet)
+        public static void GameResultLogic(int bet)
         {
 
             var krupierScore = KrupierScore();
@@ -216,22 +216,20 @@ namespace PokemonAPI
 
         }
 
-        private static void MultipleCoins(int bet)
+        public static void MultipleCoins(int bet)
         {
             AnsiConsole.WriteLine($"Dodaje {bet} żetonów");
 
             _coins += bet;
         }
 
-        private static void ReduceCoins(int bet)
+        public static void ReduceCoins(int bet)
         {
             _coins -= bet;
             AnsiConsole.WriteLine($"Odejmuje {bet} żetonów");
 
             if (_coins <= 0)
             {
-                ClearOnsoleInGivenRange(0, 100);
-                Console.SetCursorPosition(0, 0);
                 AnsiConsole.WriteLine("Przegrałeś wszystkie żetony :(");
                 Console.WriteLine(AsciiCards.Pepe);
 
@@ -240,7 +238,7 @@ namespace PokemonAPI
 
 
 
-        private static int PlaceBet()
+        public static int PlaceBet()
         {
             Console.SetCursorPosition(100, 0);
             ClearOnsoleInGivenRange(placeBetStartPosition, placeBetEndPosition);
@@ -293,7 +291,7 @@ namespace PokemonAPI
             return bet;
         }
 
-        private static void ClearOnsoleInGivenRange(int startPosition, int endPosition)
+        public static void ClearOnsoleInGivenRange(int startPosition, int endPosition)
         {
             for (int i = startPosition; i < endPosition; i++)
             {
@@ -302,7 +300,7 @@ namespace PokemonAPI
             }
         }
 
-        private static int CompareScore(int playerScore, int maklerScore)
+        public static int CompareScore(int playerScore, int maklerScore)
         {
             if (playerScore > maklerScore)
             {
@@ -318,7 +316,7 @@ namespace PokemonAPI
             return -1;
         }
 
-        private static int KrupierScore()
+        public static int KrupierScore()
         {
             var krupierScore = 0;
             Random r = new Random();

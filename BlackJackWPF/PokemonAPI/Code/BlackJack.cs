@@ -302,7 +302,7 @@ namespace PokemonAPI
 
         public static int CompareScore(int playerScore, int maklerScore)
         {
-            if (playerScore > maklerScore)
+            if (playerScore > maklerScore || maklerScore >21 )
             {
                 AnsiConsole.WriteLine("Wygrałeś z krupierem!");
                 return 1;

@@ -31,10 +31,12 @@ namespace BlackJackWPF
         private int bet = 0;
         private bool isBetPlaced = false;
         public int coins = 1000;
+        public int cardPosition = 50;
 
             public MainWindow()
             {
                 InitializeComponent();
+                txtCoins.Content = coins;
             }
 
         private void Button_TakeCard(object sender, RoutedEventArgs e)
@@ -52,18 +54,32 @@ namespace BlackJackWPF
                 var card = TakeCard();
                 txtUserPoints.Content = $"Punkty: {score}";
 
+
+                var cardImage = CreateCard();
+                cardPosition += 10;
+
+
+                GridMain.Children.Add(cardImage);
+                cardImage.Source = new BitmapImage(new Uri((string)card.image, UriKind.RelativeOrAbsolute));
+
                 if (score > BlackJack.MAX_SCORE)
                 {
 
-                    BlackJack.ReduceCoins(bet);
+                    coins -= bet;
                     txtUserPoints.Visibility = 0;
 
                     //Zeruje punkty
-                    RestartScoreAndBet();
                     UserContiunationDecision();
                 }
 
-                imgCard.Source = new BitmapImage(new Uri((string) card.image, UriKind.RelativeOrAbsolute));
+                if (score == BlackJack.MAX_SCORE)
+                {
+                    coins += bet;
+                    UserContiunationDecision();
+                }
+
+
+                
 
             }
         }
@@ -74,6 +90,14 @@ namespace BlackJackWPF
             score = 0;
             txtBet.Content = bet;
             txtUserPoints.Content = score;
+            txtGameInfo.Content = "Obstaw zakład";
+            txtPlacedBet.Content = 0;
+            cardPosition = 50;
+            isBetPlaced = false;
+            txtCoins.Content = coins;
+
+
+
         }
 
         private void UserContiunationDecision()
@@ -89,14 +113,20 @@ namespace BlackJackWPF
             switch (result)
             {
                 case MessageBoxResult.Cancel:
-                    MessageBox.Show("Dziekuje za gre");
+                    MessageBox.Show($"Dziekuje za gre, wygrałeś {coins} dolarów");
                     Close();
                     break;
                 case MessageBoxResult.Yes:
-                    MessageBox.Show("Gramy dalej"); 
+                    MessageBox.Show("Gramy dalej");
+                    if (coins == 0)
+                    {
+                        MessageBox.Show("Jesteś spłukany, zostajesz wyrzucony z kasyna");
+                        Close();
+                    }
+                    RestartScoreAndBet();
                     break;
                 case MessageBoxResult.No:
-                    MessageBox.Show("Dziekuje za gre");
+                    MessageBox.Show($"Dziekuje za gre, wygrałeś {coins} dolarów");
                     Close();
                     break;
             }
@@ -163,6 +193,27 @@ namespace BlackJackWPF
         {
             var krupierScore = BlackJack.KrupierScore();
             var value = BlackJack.CompareScore(score, krupierScore);
+            switch (value)
+            {
+                case -1:
+                    coins -= bet;
+                    MessageBox.Show($"Krupier miał w kartach {krupierScore}, przegrałeś!");
+                    RestartScoreAndBet();
+
+                    UserContiunationDecision();
+                    break;
+                case 0:
+                    
+                    MessageBox.Show($"REMIS, krupier miał {krupierScore} w kartach");
+                    RestartScoreAndBet();
+
+                    break;
+                case 1:
+                    coins += bet;
+                    MessageBox.Show($"Krupier miał w kartach {krupierScore}, wygrałeś!");
+                    RestartScoreAndBet();
+                    break;
+            }
 
            
         }
@@ -190,12 +241,27 @@ namespace BlackJackWPF
         {
             Image img = new Image
             {
-                Height = 200,
-                Width = 150,
-                Margin = new Thickness(100,100,100,100)
+                Height = 70,
+                Width = 45,
+                Margin = new Thickness(cardPosition,285,0,0)
 
             };
             return img;
+        }
+
+        private void Button_RestartBet_Click(object sender, RoutedEventArgs e)
+        {
+            if (isBetPlaced is false)
+            {
+                bet = 0;
+                txtBet.Content = 0;
+                txtGameInfo.Content = "Zrestartowales swoj zaklad";
+            }
+            else
+            {
+
+                txtGameInfo.Content = "Nie mozesz restartować zakładu w trakcie gry!";
+            }
         }
     }
 }

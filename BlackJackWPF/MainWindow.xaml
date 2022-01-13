@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BlackJackWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="850">
-    <Grid Height="450" Width="800" >
+    <Grid Height="450" Width="800" x:Name="GridMain">
         <!-- Setting background -->
         <Grid.Background>
             <ImageBrush ImageSource="Resources/bg.jpg"></ImageBrush>
@@ -15,7 +15,7 @@
         <Button Content="Dobierz karte" HorizontalAlignment="Left" Margin="595,378,0,0" VerticalAlignment="Top" Click="Button_TakeCard" RenderTransformOrigin="0.492,0.553"/>
         <Button Content="Pas" HorizontalAlignment="Left" Margin="685,378,0,0" VerticalAlignment="Top" Click="Button_Stand" RenderTransformOrigin="0.492,0.553" Width="43"/>
         <Label x:Name="txtUserPoints" Content="Punkty:" HorizontalAlignment="Left" Margin="601,352,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="DarkRed"/>
-        <Label x:Name="txtGameInfo" Content="Label" HorizontalAlignment="Left" Margin="608,29,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="txtGameInfo" Content="Label" HorizontalAlignment="Left" Margin="457,51,0,0" VerticalAlignment="Top" FontSize="16" Background="#00000000"/>
         <Button x:Name="Button_PlaceBet1" Content="Button" HorizontalAlignment="Left" Margin="244,414,0,0" VerticalAlignment="Top" Height="18" Width="22" Click="Button_Add1ToBetClick" Opacity="0" RenderTransformOrigin="0.5,0.5" >
             <Button.RenderTransform>
                 <TransformGroup>
@@ -34,6 +34,8 @@
         <Label x:Name="txtBet" Content="" HorizontalAlignment="Left" Margin="82,339,0,0" VerticalAlignment="Top" Height="26" Width="61"/>
         <Button Content="Obstaw zakład" HorizontalAlignment="Left" Margin="180,352,0,0" VerticalAlignment="Top" Click="Button_PlaceBet" />
         <Label x:Name="txtPlacedBet" Content="Obstawiłeś: " HorizontalAlignment="Left" Margin="501,352,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="Button_RestartBet" Content="Resetuj zakład" HorizontalAlignment="Left" Margin="272,352,0,0" VerticalAlignment="Top" Click="Button_RestartBet_Click"/>
+        <Label x:Name="txtCoins" Content="Żetony&#xD;&#xA;" HorizontalAlignment="Left" Margin="30,51,0,0" VerticalAlignment="Top"/>
 
 
 

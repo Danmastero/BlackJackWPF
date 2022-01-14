@@ -95,6 +95,8 @@ namespace PokemonAPI
 
                                 AnsiConsole.WriteLine($"Niestety przegrałeś, tracisz {bet} żetonów");
                                 ReduceCoins(bet);
+
+
                                 _roundNumber = 0;
                                 _points = 0;
                                 Thread.Sleep(3000);
@@ -196,7 +198,7 @@ namespace PokemonAPI
         public static void GameResultLogic(int bet)
         {
 
-            var krupierScore = KrupierScore();
+            var krupierScore = KrupierScore(_points);
             if (krupierScore <= 21)
             {
                 if (_points > krupierScore)
@@ -316,12 +318,16 @@ namespace PokemonAPI
             return -1;
         }
 
-        public static int KrupierScore()
+        public static int KrupierScore(int userScore)
         {
             var krupierScore = 0;
             Random r = new Random();
             while (krupierScore <= 17)
             {
+                if (krupierScore > userScore)
+                {
+                    return krupierScore;
+                }
                 int firstTake = r.Next(2, 11);
                 krupierScore += firstTake;
             }

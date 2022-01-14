@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PokemonAPI;
+using PokemonAPI.ASCII;
 using PokemonAPI.JsonHandler;
 
 namespace BlackJackWPF
@@ -68,13 +69,19 @@ namespace BlackJackWPF
                 if (score > BlackJack.MAX_SCORE)
                 {
 
-                    coins -= bet;
                     txtUserPoints.Visibility = 0;
+                    coins -= bet;
 
                     MessageBox.Show("Przekroczyłeś 21 punktów");
 
-                    //Zeruje punkty
+                    if (coins == 0)
+                    {
+                        MessageBox.Show($"Przegrałeś wszystkie żetony, zostajesz wyrzucony z kasyna :( {AsciiCards.Pepe}");
+                        Close();
+                    }
+
                     UserContiunationDecision("Przegrałeś");
+
                 }
 
                 if (score == BlackJack.MAX_SCORE)
@@ -120,8 +127,16 @@ namespace BlackJackWPF
 
         private void UserContiunationDecision(string v)
         {
-            string messageBoxText = $"{v} {bet}, czy chcesz kontynuować grę?";
-            string caption = "Word Processor";
+            string messageBoxText = "";
+
+            if (v == "Przegrałeś")
+            {
+                 messageBoxText = $"{v} {bet}, czy chcesz kontynuować grę? {AsciiCards.smallPepe}";
+            }
+                messageBoxText = $"{v} {bet}, czy chcesz kontynuować grę?";
+
+
+            string caption = "Decyzja";
             MessageBoxButton button = MessageBoxButton.YesNo;
             MessageBoxImage icon = MessageBoxImage.Question;
             MessageBoxResult result;
@@ -138,7 +153,8 @@ namespace BlackJackWPF
                     MessageBox.Show("Gramy dalej");
                     if (coins == 0)
                     {
-                        MessageBox.Show("Krupier dostrzegł, że skończyły Ci się żetony i zostałeś wyrzucony z kasyna :(");
+                        MessageBox.Show($"Krupier dostrzegł, że skończyły Ci się żetony i zostałeś wyrzucony z kasyna :( {AsciiCards.smallPepe}")
+                        ;
                         Close();
                     }
                     RestartScoreAndBet();
@@ -223,15 +239,24 @@ namespace BlackJackWPF
                 
             }
 
-            var krupierScore = BlackJack.KrupierScore();
+            var krupierScore = BlackJack.KrupierScore(score);
             var value = BlackJack.CompareScore(score, krupierScore);
             switch (value)
             {
                 case -1:
+                    coins -= bet;
+
+                    if (coins == 0)
+                    {
+                        MessageBox.Show($" Krupier miał {krupierScore} w kartach, przegrałeś wszystkie żetony, zostajesz wyrzucony z kasyna :( {AsciiCards.Pepe}");
+                        Close();
+                        return;
+                    }
+
                     MessageBox.Show($"Krupier miał w kartach {krupierScore}, przegrałeś!");
 
                     UserContiunationDecision("Przegrałeś");
-                    coins -= bet;
+                    
                     RestartScoreAndBet();
 
                     break;

@@ -32,11 +32,13 @@ namespace BlackJackWPF
         private bool isBetPlaced = false;
         public int coins = 1000;
         public int cardPosition = 50;
+        List<Image> list = new List<Image>();
 
-            public MainWindow()
+        public MainWindow()
             {
                 InitializeComponent();
-                txtCoins.Content = coins;
+                txtCoins.Content = "Żetony " + coins;
+                txtGameInfo.Content = "Witaj w kasynie :) ";
             }
 
         private void Button_TakeCard(object sender, RoutedEventArgs e)
@@ -54,9 +56,10 @@ namespace BlackJackWPF
                 var card = TakeCard();
                 txtUserPoints.Content = $"Punkty: {score}";
 
-
                 var cardImage = CreateCard();
-                cardPosition += 10;
+
+                list.Add((cardImage));
+                cardPosition += 30;
 
 
                 GridMain.Children.Add(cardImage);
@@ -68,14 +71,17 @@ namespace BlackJackWPF
                     coins -= bet;
                     txtUserPoints.Visibility = 0;
 
+                    MessageBox.Show("Przekroczyłeś 21 punktów");
+
                     //Zeruje punkty
-                    UserContiunationDecision();
+                    UserContiunationDecision("Przegrałeś");
                 }
 
                 if (score == BlackJack.MAX_SCORE)
                 {
                     coins += bet;
-                    UserContiunationDecision();
+                    MessageBox.Show("WYGRAŁEŚ! BLACKJACK!");
+                    UserContiunationDecision("Wygrałeś");
                 }
 
 
@@ -94,18 +100,30 @@ namespace BlackJackWPF
             txtPlacedBet.Content = 0;
             cardPosition = 50;
             isBetPlaced = false;
-            txtCoins.Content = coins;
+            txtCoins.Content = "Żetony " + coins;
+            ClearAllImages();
+
 
 
 
         }
 
-        private void UserContiunationDecision()
+        private void ClearAllImages()
         {
-            string messageBoxText = "Czy chcesz kontynuować grę, czy zabierasz żetony?";
+            foreach (var image in list)
+            {
+                image.Height = 0;
+                image.Width = 0;
+            }
+            list.Clear();
+        }
+
+        private void UserContiunationDecision(string v)
+        {
+            string messageBoxText = $"{v} {bet}, czy chcesz kontynuować grę?";
             string caption = "Word Processor";
             MessageBoxButton button = MessageBoxButton.YesNo;
-            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxImage icon = MessageBoxImage.Question;
             MessageBoxResult result;
 
             result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
@@ -120,7 +138,7 @@ namespace BlackJackWPF
                     MessageBox.Show("Gramy dalej");
                     if (coins == 0)
                     {
-                        MessageBox.Show("Jesteś spłukany, zostajesz wyrzucony z kasyna");
+                        MessageBox.Show("Krupier dostrzegł, że skończyły Ci się żetony i zostałeś wyrzucony z kasyna :(");
                         Close();
                     }
                     RestartScoreAndBet();
@@ -191,6 +209,20 @@ namespace BlackJackWPF
 
         private void Button_Stand(object sender, RoutedEventArgs e)
         {
+            if (isBetPlaced is false)
+            {
+                txtGameInfo.Content = "Musisz być w trakcie gry!";
+                return;
+                
+            }
+
+            if (score == 0)
+            {
+                txtGameInfo.Content = "Nie można pasować mając 0 punktów!";
+                return;
+                
+            }
+
             var krupierScore = BlackJack.KrupierScore();
             var value = BlackJack.CompareScore(score, krupierScore);
             switch (value)
@@ -200,7 +232,7 @@ namespace BlackJackWPF
                     MessageBox.Show($"Krupier miał w kartach {krupierScore}, przegrałeś!");
                     RestartScoreAndBet();
 
-                    UserContiunationDecision();
+                    UserContiunationDecision("Przegrałeś");
                     break;
                 case 0:
                     
@@ -241,9 +273,9 @@ namespace BlackJackWPF
         {
             Image img = new Image
             {
-                Height = 70,
-                Width = 45,
-                Margin = new Thickness(cardPosition,285,0,0)
+                Height = 140,
+                Width = 90,
+                Margin = new Thickness(cardPosition,150,0,0)
 
             };
             return img;

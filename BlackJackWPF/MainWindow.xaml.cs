@@ -188,6 +188,10 @@ namespace BlackJackWPF
 
         private void Button_Add500ToBetClick(object sender, RoutedEventArgs e)
         {
+            if (bet + 500 > coins)
+            {
+                return;
+            }
             bet += 500;
             txtBet.Content = bet;
 
@@ -195,6 +199,10 @@ namespace BlackJackWPF
 
         private void Button_Add100ToBetClick(object sender, RoutedEventArgs e)
         {
+            if (bet + 100 > coins)
+            {
+                return;
+            }
             bet += 100;
             txtBet.Content = bet;
 
@@ -203,6 +211,10 @@ namespace BlackJackWPF
 
         private void Button_Add5ToBetClick(object sender, RoutedEventArgs e)
         {
+            if (bet + 5 > coins)
+            {
+                return;
+            }
             bet += 5;
             txtBet.Content = bet;
 
@@ -210,6 +222,10 @@ namespace BlackJackWPF
 
         private void Button_Add25ToBetClick(object sender, RoutedEventArgs e)
         {
+            if (bet + 25 > coins)
+            {
+                return;
+            }
             bet += 25;
             txtBet.Content = bet;
 
@@ -218,6 +234,10 @@ namespace BlackJackWPF
 
         private void Button_Add1ToBetClick(object sender, RoutedEventArgs e)
         {
+            if (bet + 1 > coins)
+            {
+                return;
+            }
             bet += 1;
             txtBet.Content = bet;
 

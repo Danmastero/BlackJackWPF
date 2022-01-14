@@ -228,11 +228,12 @@ namespace BlackJackWPF
             switch (value)
             {
                 case -1:
-                    coins -= bet;
                     MessageBox.Show($"Krupier miał w kartach {krupierScore}, przegrałeś!");
-                    RestartScoreAndBet();
 
                     UserContiunationDecision("Przegrałeś");
+                    coins -= bet;
+                    RestartScoreAndBet();
+
                     break;
                 case 0:
                     
@@ -241,8 +242,9 @@ namespace BlackJackWPF
 
                     break;
                 case 1:
-                    coins += bet;
                     MessageBox.Show($"Krupier miał w kartach {krupierScore}, wygrałeś!");
+                    coins += bet;
+
                     RestartScoreAndBet();
                     break;
             }
